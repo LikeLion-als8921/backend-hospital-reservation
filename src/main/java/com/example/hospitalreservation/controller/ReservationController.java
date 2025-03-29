@@ -7,7 +7,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 // TODO : 컨트롤러에 필요한 어노테이션을 작성해주세요.
 // TODO : 요청 경로는 templates를 참고하여 작성해주세요.
@@ -36,9 +39,12 @@ public class ReservationController {
 
     // TODO : 필요한 어노테이션을 작성해주세요.
     @PostMapping
-    public String createReservation(@RequestParam Long doctorId, @RequestParam Long patientId) {
+    public String createReservation(@RequestParam Long doctorId, @RequestParam Long patientId, @RequestParam String reservationTime) {
         // TODO : 예약을 진행하는 코드를 작성해주세요.
-        Reservation reservation = new Reservation(doctorId, patientId, LocalDateTime.now());
+        LocalDate currentDate = LocalDate.now();
+        LocalTime parsedTime = LocalTime.parse(reservationTime);
+        LocalDateTime parsedReservationTime = parsedTime.atDate(currentDate);
+        Reservation reservation = new Reservation(doctorId, patientId, parsedReservationTime);
         reservationRepository.save(reservation);
         return "redirect:/reservations";
     }
