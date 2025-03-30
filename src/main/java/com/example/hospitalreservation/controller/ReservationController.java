@@ -21,7 +21,10 @@ import java.time.format.DateTimeFormatter;
 public class ReservationController {
 
     // TODO : 주입 받아야 할 객체를 설정해주세요.
-    private final ReservationService reservationService = new ReservationService();
+    private final ReservationService reservationService;
+    public ReservationController(ReservationService reservationService) {
+        this.reservationService = reservationService;
+    }
 
     // TODO : 필요한 어노테이션을 작성해주세요.
     @GetMapping
@@ -42,11 +45,9 @@ public class ReservationController {
     @PostMapping
     public String createReservation(@RequestParam Long doctorId, @RequestParam Long patientId, @RequestParam String reservationTime) {
         // TODO : 예약을 진행하는 코드를 작성해주세요.
-        LocalDate currentDate = LocalDate.now();
-        LocalTime parsedTime = LocalTime.parse(reservationTime);
-        LocalDateTime parsedReservationTime = parsedTime.atDate(currentDate);
+        LocalDateTime localDateTime = LocalDateTime.parse(reservationTime);
 
-        reservationService.createReservation(doctorId, patientId, parsedReservationTime);
+        reservationService.createReservation(doctorId, patientId, localDateTime);
         return "redirect:/reservations";
     }
 

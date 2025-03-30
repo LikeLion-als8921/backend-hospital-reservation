@@ -1,16 +1,31 @@
 package com.example.hospitalreservation.controller;
 
 import com.example.hospitalreservation.repository.ReservationRepository;
+import com.example.hospitalreservation.service.ReservationService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@Controller
+@RestController
 @ResponseBody
 @RequestMapping("/api/reservations")
 public class ReservationAPIController {
+
+    private final ReservationService reservationService;
+    public ReservationAPIController(ReservationService reservationService) {
+        this.reservationService = reservationService;
+    }
+
+
+//    @GetMapping
+//    public Map<String, Object> getReservationCount() {
+//        Map<String, Object> map = new HashMap<>();
+//
+//        map.put("count",reservationService.getAllReservations().size());
+//        return map;
+//    }
 
     @PostMapping("")
     public Map<String, Object> reservation(@RequestBody Map<String, Object> reservationData) {

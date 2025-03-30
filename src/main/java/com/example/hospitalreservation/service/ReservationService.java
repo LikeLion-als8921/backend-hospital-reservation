@@ -11,8 +11,13 @@ import java.util.List;
 @Service
 public class ReservationService {
 
+
     // TODO : 주입 받아야 객체를 작성해주세요.
-    private final ReservationRepository reservationRepository = new ReservationRepository();
+    private final ReservationRepository reservationRepository;
+
+    public ReservationService(ReservationRepository reservationRepository) {
+        this.reservationRepository = reservationRepository;
+    }
 
     // TODO : 모든 예약 리스트를 조회하는 코드를 작성해주세요.
     public List<Reservation> getAllReservations() {
