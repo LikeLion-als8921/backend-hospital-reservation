@@ -8,7 +8,7 @@ public class Reservation {
     private Long patientId;
     private LocalDateTime reservationTime;
 
-    // TODO : 필요한 메서드가 있다면 작성해주세요.
+    // 필요한 메서드가 있다면 작성해주세요.
 
     public Reservation(Long doctorId, Long patientId, LocalDateTime reservationTime) {
         this.doctorId = doctorId;
