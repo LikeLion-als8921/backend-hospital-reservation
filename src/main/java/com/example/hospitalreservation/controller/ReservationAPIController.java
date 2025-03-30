@@ -2,12 +2,14 @@ package com.example.hospitalreservation.controller;
 
 import com.example.hospitalreservation.repository.ReservationRepository;
 import com.example.hospitalreservation.service.ReservationService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @RestController
 @ResponseBody
 @RequestMapping("/api/reservations")
@@ -49,13 +51,14 @@ public class ReservationAPIController {
         String cancelReason = reservationData.get("cancelReason").toString();
         Map<String, Object> map = new HashMap<>();
 
-        // TODO : 예약 취소 성공
-        if(true){
+        // 예약 취소 성공
+        try {
+            reservationService.cancelReservation(id);
             map.put("message", "예약이 취소되었습니다.");
+            log.info("취소 사유 : {}", cancelReason);
         }
-
-        // TODO : 예약이 존재하지 않는 경우
-        else{
+        // 예약이 존재하지 않는 경우
+        catch (Exception e) {
             map.put("error", "존재하지 않는 예약입니다.");
         }
         return map;
