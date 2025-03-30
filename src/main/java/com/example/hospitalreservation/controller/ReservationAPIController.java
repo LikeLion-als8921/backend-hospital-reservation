@@ -1,11 +1,14 @@
 package com.example.hospitalreservation.controller;
 
+import com.example.hospitalreservation.model.Reservation;
 import com.example.hospitalreservation.repository.ReservationRepository;
 import com.example.hospitalreservation.service.ReservationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,14 +35,21 @@ public class ReservationAPIController {
     @PostMapping("")
     public Map<String, Object> reservation(@RequestBody Map<String, Object> reservationData) {
         Map<String, Object> map = new HashMap<>();
+        Long patientId = ((Number) reservationData.get("patientId")).longValue();
+        Long doctorId = ((Number) reservationData.get("doctorId")).longValue();
+        int reservationTime = LocalTime.parse(reservationData.get("reservationTime").toString()).getHour();
 
-        //TODO : 예약에 성공했을 경우
-        if(false){
+        Reservation reservation = new Reservation(doctorId, patientId, null);
+
+        // 예약에 성공했을 경우
+        try {
+            reservationService.createReservation(reservation, reservationTime);
             map.put("reservationId", 1001);
             map.put("message", "예약이 완료되었습니다.");
         }
-        //TODO : 예약에 실패했을 경우
-        else {
+        // 예약에 실패했을 경우
+        catch (Exception e) {
+            log.error(e.getMessage());
             map.put("error","해당 시간에는 이미 예약이 있습니다. 다른 시간을 선택해주세요.");
         }
         return map;
