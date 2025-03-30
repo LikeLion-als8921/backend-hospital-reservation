@@ -23,27 +23,18 @@ public class ReservationAPIController {
         this.reservationService = reservationService;
     }
 
-
-//    @GetMapping
-//    public Map<String, Object> getReservationCount() {
-//        Map<String, Object> map = new HashMap<>();
-//
-//        map.put("count",reservationService.getAllReservations().size());
-//        return map;
-//    }
-
     @PostMapping("")
     public Map<String, Object> reservation(@RequestBody Map<String, Object> reservationData) {
         Map<String, Object> map = new HashMap<>();
         Long patientId = ((Number) reservationData.get("patientId")).longValue();
         Long doctorId = ((Number) reservationData.get("doctorId")).longValue();
-        int reservationTime = LocalTime.parse(reservationData.get("reservationTime").toString()).getHour();
+        LocalDateTime reservationTime = LocalDateTime.parse(reservationData.get("reservationTime").toString());
 
-        Reservation reservation = new Reservation(doctorId, patientId, null);
+        Reservation reservation = new Reservation(doctorId, patientId, reservationTime);
 
         // 예약에 성공했을 경우
         try {
-            reservationService.createReservation(reservation, reservationTime);
+            reservationService.createReservation(reservation);
             map.put("reservationId", 1001);
             map.put("message", "예약이 완료되었습니다.");
         }
@@ -55,10 +46,10 @@ public class ReservationAPIController {
         return map;
     }
 
-
     @DeleteMapping("/{id}")
     public Map<String, Object> cancelReservation(@RequestBody Map<String, Object> reservationData, @PathVariable Long id) {
         String cancelReason = reservationData.get("cancelReason").toString();
+        log.info("cancel reason: {}", cancelReason);
         Map<String, Object> map = new HashMap<>();
 
         // 예약 취소 성공
@@ -69,7 +60,7 @@ public class ReservationAPIController {
         }
         // 예약이 존재하지 않는 경우
         catch (Exception e) {
-            map.put("error", "존재하지 않는 예약입니다.");
+            map.put("error", e.getMessage());
         }
         return map;
     }

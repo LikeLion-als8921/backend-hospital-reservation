@@ -39,20 +39,13 @@ public class ReservationService {
         }
     }
 
-    public void createReservation(Reservation reservation, int reservationTime) throws Exception {
-        try {
-            timeTable.addTime(reservationTime);
-            reservationRepository.save(reservation);
-        }
-        catch (Exception e) {
-            throw new Exception(e);
-        }
-    }
-
     // 예약 취소 가능성을 검사 후 취소하기
     public void cancelReservation(Long id) throws Exception {
         try {
+            Reservation reservation = reservationRepository.findById(id);
             reservationRepository.deleteById(id);
+            int reservationTime = reservation.getReservationTime().getHour();
+            timeTable.removeTime(reservationTime);
         }
         catch (Exception e) {
             throw new Exception(e);

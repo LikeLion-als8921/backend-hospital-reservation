@@ -18,6 +18,15 @@ public class ReservationRepository {
         return reservations;
     }
 
+    public Reservation findById(Long id) throws Exception {
+        for (Reservation reservation : reservations) {
+            if (reservation.getId().equals(id)) {
+                return reservation;
+            }
+        }
+        return null;
+    }
+
     // 예약 엔티티를 저장하는 코드를 작성해주세요.
     public Reservation save(Reservation reservation) {
         reservation.setId(nextId++);
