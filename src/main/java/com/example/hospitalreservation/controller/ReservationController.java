@@ -46,8 +46,14 @@ public class ReservationController {
     public String createReservation(@RequestParam Long doctorId, @RequestParam Long patientId, @RequestParam String reservationTime) {
         // 예약을 진행하는 코드를 작성해주세요.
         LocalDateTime localDateTime = LocalDateTime.parse(reservationTime);
+        Reservation reservation = new Reservation(doctorId, patientId, localDateTime);
 
-        reservationService.createReservation(doctorId, patientId, localDateTime);
+        try {
+            reservationService.createReservation(reservation);
+        }
+        catch (Exception e) {
+            log.error(e.getMessage());
+        }
         return "redirect:/reservations";
     }
 
