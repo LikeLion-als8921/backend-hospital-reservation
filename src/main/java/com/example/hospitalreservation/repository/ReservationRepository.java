@@ -1,6 +1,7 @@
 package com.example.hospitalreservation.repository;
 
 import com.example.hospitalreservation.model.Reservation;
+import com.example.hospitalreservation.model.ReservationException;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -25,15 +26,14 @@ public class ReservationRepository {
     }
 
     // 예약 엔티티를 삭제하는 코드를 작성해주세요.
-    public void deleteById(Long id)
+    public void deleteById(Long id) throws Exception
     {
-        for(int i = 0; i < reservations.size(); i++)
-        {
-            if(reservations.get(i).getId().equals(id))
-            {
-                reservations.remove(reservations.get(i));
-                break;
+        for (Reservation reservation : reservations) {
+            if (reservation.getId().equals(id)) {
+                reservations.remove(reservation);
+                return;
             }
         }
+        throw new Exception(ReservationException.NOT_EXIST_RESERVATION.getErrorMessage());
     }
 }
