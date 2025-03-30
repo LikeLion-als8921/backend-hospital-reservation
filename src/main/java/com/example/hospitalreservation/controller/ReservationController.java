@@ -2,6 +2,7 @@ package com.example.hospitalreservation.controller;
 
 import com.example.hospitalreservation.model.Reservation;
 import com.example.hospitalreservation.repository.ReservationRepository;
+import com.example.hospitalreservation.service.ReservationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,13 +21,13 @@ import java.time.format.DateTimeFormatter;
 public class ReservationController {
 
     // TODO : 주입 받아야 할 객체를 설정해주세요.
-    private ReservationRepository reservationRepository = new ReservationRepository();
+    private final ReservationService reservationService = new ReservationService();
 
     // TODO : 필요한 어노테이션을 작성해주세요.
     @GetMapping
     public String getReservations(Model model) {
         // TODO : 예약 메인 페이지를 가져오는 코드를 작성해주세요.
-        model.addAttribute("reservations", reservationRepository.findAll());
+        model.addAttribute("reservations", reservationService.getAllReservations());
         return "index";
     }
 
@@ -44,8 +45,8 @@ public class ReservationController {
         LocalDate currentDate = LocalDate.now();
         LocalTime parsedTime = LocalTime.parse(reservationTime);
         LocalDateTime parsedReservationTime = parsedTime.atDate(currentDate);
-        Reservation reservation = new Reservation(doctorId, patientId, parsedReservationTime);
-        reservationRepository.save(reservation);
+
+        reservationService.createReservation(doctorId, patientId, parsedReservationTime);
         return "redirect:/reservations";
     }
 
@@ -53,7 +54,7 @@ public class ReservationController {
     // TODO : 필요한 어노테이션을 작성해주세요.
     public String cancelReservation(@PathVariable Long id) {
         // TODO : 예약을 취소하는 코드를 작성해주세요.
-        reservationRepository.deleteById(id);
+        reservationService.cancelReservation(id);
         return "redirect:/reservations";
     }
 }

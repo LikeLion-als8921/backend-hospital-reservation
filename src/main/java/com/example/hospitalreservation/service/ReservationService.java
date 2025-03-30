@@ -12,7 +12,7 @@ import java.util.List;
 public class ReservationService {
 
     // TODO : 주입 받아야 객체를 작성해주세요.
-    private ReservationRepository reservationRepository;
+    private final ReservationRepository reservationRepository = new ReservationRepository();
 
     // TODO : 모든 예약 리스트를 조회하는 코드를 작성해주세요.
     public List<Reservation> getAllReservations() {
