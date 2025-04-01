@@ -35,9 +35,8 @@ public class ReservationController {
     }
 
     @PostMapping
-    public String createReservation(@RequestParam Long doctorId, @RequestParam Long patientId, @RequestParam String reservationTime) {
-        LocalDateTime localDateTime = LocalDateTime.parse(reservationTime);
-        Reservation reservation = new Reservation(doctorId, patientId, localDateTime);
+    public String createReservation(@RequestParam Long doctorId, @RequestParam Long patientId, @RequestParam LocalDateTime reservationTime) {
+        Reservation reservation = new Reservation(doctorId, patientId, reservationTime);
         try {
             reservationService.createReservation(reservation);
         }
