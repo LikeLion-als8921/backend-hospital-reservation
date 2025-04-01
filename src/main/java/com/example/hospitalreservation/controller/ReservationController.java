@@ -1,17 +1,13 @@
 package com.example.hospitalreservation.controller;
 
 import com.example.hospitalreservation.model.Reservation;
-import com.example.hospitalreservation.repository.ReservationRepository;
 import com.example.hospitalreservation.service.ReservationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 
 @Slf4j
 @Controller
