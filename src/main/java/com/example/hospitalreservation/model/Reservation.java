@@ -35,4 +35,8 @@ public class Reservation {
     public LocalDateTime getReservationTime() {
         return reservationTime;
     }
+
+    public int getHour(){
+        return reservationTime.getHour();
+    }
 }
