@@ -29,9 +29,8 @@ public class ReservationService {
 
     // 예약이 가능한지 검사 후 예약하기
     public void createReservation(Reservation reservation) throws Exception {
-        int reservationTime = reservation.getHour();
         try {
-            timeTable.addTime(reservationTime);
+            timeTable.enroll(reservation);
             reservationRepository.save(reservation);
         }
         catch (Exception e) {
@@ -45,7 +44,7 @@ public class ReservationService {
             Reservation reservation = reservationRepository.findById(id);
             reservationRepository.deleteById(id);
             int reservationTime = reservation.getHour();
-            timeTable.removeTime(reservationTime);
+//            timeTable.removeTime(reservationTime);
         }
         catch (Exception e) {
             throw new Exception(e);
