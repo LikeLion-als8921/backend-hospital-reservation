@@ -24,7 +24,6 @@ public class ReservationTime
         // 1. 새로 들어온 endTime 이 기존 시간의 startTime 보다 빠를 경우
         // 2. 새로 들어온 startTime 이 기존 시간의 endTime 보다 느릴 경우
 
-        return other.getEndTime().isBefore(startTime)
-                || other.getStartTime().isBefore(endTime);
+        return !(other.getEndTime().isBefore(startTime) || other.getStartTime().isAfter(endTime));
     }
 }
