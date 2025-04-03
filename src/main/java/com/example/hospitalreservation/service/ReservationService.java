@@ -43,8 +43,7 @@ public class ReservationService {
         try {
             Reservation reservation = reservationRepository.findById(id);
             reservationRepository.deleteById(id);
-            int reservationTime = reservation.getHour();
-//            timeTable.removeTime(reservationTime);
+            timeTable.remove(id);
         }
         catch (Exception e) {
             throw new Exception(e);

@@ -1,41 +1,50 @@
 package com.example.hospitalreservation.repository;
 
 import com.example.hospitalreservation.model.Doctor;
+import com.example.hospitalreservation.model.Reservation;
 import com.example.hospitalreservation.model.ReservationException;
+import com.example.hospitalreservation.model.ReservationTime;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Repository
 public class TimeTable {
-    private final List<Integer> reservationTime = new ArrayList<>();
+    private final List<Map<Long, ReservationTime>> reservationTimeTable = new ArrayList<>();
 
-    public void addTime(int hour) throws Exception {
-        if(hour < Doctor.getStartHour() || hour > Doctor.getEndHour()){
-            throw new Exception(ReservationException.NOT_AVAILABLE_TIME.getErrorMessage());
-        }
-        if(reservationTime.contains(hour)){
-            throw new Exception(ReservationException.RESERVATION_TIME_ALREADY_EXISTS.getErrorMessage());
-        }
-        reservationTime.add(hour);
+    private boolean checkInTime(ReservationTime reservationTime) {
+        return reservationTime.getStartTime().getHour() >= Doctor.getStartHour()
+                && reservationTime.getEndTime().getHour() < Doctor.getEndHour();
     }
 
-    public void removeTime(int hour){
-        for(Integer i : reservationTime){
-            log.info(i.toString());
-        }
-        for(int i = 0 ; i < reservationTime.size(); i++){
-            if(reservationTime.get(i) == hour){
-                reservationTime.remove(i);
+    private boolean checkConflict(ReservationTime reservationTime) {
+        for (Map<Long, ReservationTime> map : reservationTimeTable) {
+            for (Map.Entry<Long, ReservationTime> entry : map.entrySet()) {
+                ReservationTime other = entry.getValue();
+                if(reservationTime.isConflict(other)) return true;
             }
         }
-        log.info("DELETE");
-        for(Integer i : reservationTime){
-            log.info(i.toString());
-        }
+        return false;
+    }
+
+    public void enroll(Reservation reservation) throws Exception {
+        Long id = reservation.getId();
+        ReservationTime reservationTime = new ReservationTime(reservation);
+        if(!checkInTime(reservationTime)) throw new Exception(ReservationException.NOT_AVAILABLE_TIME.getErrorMessage());
+        if(checkConflict(reservationTime)) throw new Exception(ReservationException.RESERVATION_TIME_ALREADY_EXISTS.getErrorMessage());
+
+        Map<Long, ReservationTime> map = new HashMap<>();
+        map.put(id, reservationTime);
+
+        reservationTimeTable.add(map);
+    }
+
+    public void remove(Long id) {
+        reservationTimeTable.removeIf(map -> map.containsKey(id));
     }
 }
