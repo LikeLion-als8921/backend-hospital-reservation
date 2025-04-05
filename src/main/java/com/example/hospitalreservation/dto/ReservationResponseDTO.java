@@ -7,7 +7,6 @@ public class ReservationResponseDTO {
     private Long reservationId;
     private String message;
     private Long calculatedFee;
-
     private String error;
 
     public ReservationResponseDTO(Long reservationId, String message, Long calculatedFee) {
