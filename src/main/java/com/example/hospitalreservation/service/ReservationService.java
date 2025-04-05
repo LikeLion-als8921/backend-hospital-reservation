@@ -1,6 +1,7 @@
 package com.example.hospitalreservation.service;
 
-import com.example.hospitalreservation.dto.ShowReservationResponse;
+import com.example.hospitalreservation.dto.*;
+import com.example.hospitalreservation.enums.ReservationType;
 import com.example.hospitalreservation.model.Reservation;
 import com.example.hospitalreservation.repository.TimeTable;
 import com.example.hospitalreservation.repository.ReservationRepository;
@@ -9,12 +10,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-// 서비스 레이어에서 필요한 어노테이션을 작성해주세요.
 @Slf4j
 @Service
 public class ReservationService {
 
-    // 주입 받아야 객체를 작성해주세요.
     private final ReservationRepository reservationRepository;
     private final TimeTable timeTable;
 
@@ -23,32 +22,42 @@ public class ReservationService {
         this.timeTable = timeTable;
     }
 
-    // 모든 예약 리스트를 조회하는 코드를 작성해주세요.
     public List<ShowReservationResponse> getAllReservations() {
         log.info("Get all reservations Service");
         return reservationRepository.findAll().stream()
                 .map(reservation-> ShowReservationResponse.from(reservation)).toList();
     }
 
-    // 예약이 가능한지 검사 후 예약하기
-    public void createReservation(Reservation reservation) throws Exception {
+    public CreateReservationResponse createReservation(CreateReservationRequest dto) throws Exception {
+
+        Reservation reservation = new Reservation(
+                dto.getPatientId(),
+                dto.getDoctorId(),
+                dto.getReservationStartTime(),
+                dto.getReservationEndTime(),
+                dto.getReason());
+
+        reservation.setFee(ReservationType.calculateFee(dto.getReason()));
+        reservation.setId(reservationRepository.getNextId());
         try {
-            reservation.setId(reservationRepository.getNextId());
             timeTable.enroll(reservation);
             reservationRepository.save(reservation);
+
+            return CreateReservationResponse.success(reservation.getId(), "예약이 완료되었습니다.", reservation.getFee());
         }
         catch (Exception e) {
-            throw new Exception(e);
+            throw new Exception(e.getMessage());
         }
     }
 
     // 예약 취소 가능성을 검사 후 취소하기
-    public void cancelReservation(Long id) throws Exception {
+    public DeleteReservationResponse cancelReservation(DeleteReservationRequest dto, Long id) throws Exception {
         try {
-            // ToDo : 이 부분 로직 수정해야할 것 같음..
-            Reservation reservation = reservationRepository.findById(id);
             reservationRepository.deleteById(id);
             timeTable.remove(id);
+
+            log.info("예약 취소 : {}", dto.getCancelReason());
+            return DeleteReservationResponse.success("예약이 취소되었습니다.");
         }
         catch (Exception e) {
             throw new Exception(e);
