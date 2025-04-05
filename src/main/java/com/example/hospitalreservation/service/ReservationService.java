@@ -27,10 +27,7 @@ public class ReservationService {
     public List<ShowReservationResponse> getAllReservations() {
         log.info("Get all reservations Service");
         return reservationRepository.findAll().stream()
-                .map(reservation-> {
-                    reservation.setFee(10000L);
-                    return ShowReservationResponse.from(reservation);
-                }).toList();
+                .map(reservation-> ShowReservationResponse.from(reservation)).toList();
     }
 
     // 예약이 가능한지 검사 후 예약하기

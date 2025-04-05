@@ -1,15 +1,14 @@
 package com.example.hospitalreservation.controller;
 
 import com.example.hospitalreservation.dto.*;
+import com.example.hospitalreservation.enums.ReservationType;
 import com.example.hospitalreservation.model.Reservation;
 import com.example.hospitalreservation.service.ReservationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -22,11 +21,13 @@ public class ReservationAPIController {
         this.reservationService = reservationService;
     }
 
+    // 예약 리스트 조회
     @GetMapping("")
     public ResponseEntity<List<ShowReservationResponse>> getReservations() {
         return ResponseEntity.ok(reservationService.getAllReservations());
     }
 
+    // 예약 등록
     @PostMapping("")
     public ResponseEntity<CreateReservationResponse> reservation(@RequestBody CreateReservationRequest dto) {
         Reservation reservation = new Reservation(
@@ -39,8 +40,9 @@ public class ReservationAPIController {
         CreateReservationResponse response;
         // 예약에 성공했을 경우
         try {
+            reservation.setFee(ReservationType.calculateFee(dto.getReason()));
             reservationService.createReservation(reservation);
-            response = CreateReservationResponse.success(reservation.getId(), "예약이 완료되었습니다.", 10000L);
+            response = CreateReservationResponse.success(reservation.getId(), "예약이 완료되었습니다.", reservation.getFee());
             log.info("예약이 완료되었습니다.");
             return ResponseEntity.ok(response);
         }
@@ -52,6 +54,7 @@ public class ReservationAPIController {
         return ResponseEntity.badRequest().body(response);
     }
 
+    // 예약 취소
     @DeleteMapping("/{id}")
     public ResponseEntity<DeleteReservationResponse> cancelReservation(@RequestBody DeleteReservationRequest dto, @PathVariable Long id) {
         String cancelReason = dto.getCancelReason();
