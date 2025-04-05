@@ -15,5 +15,4 @@ public class ReservationController {
     public String showReservationForm() {
         return "reservation_form";
     }
-
 }
