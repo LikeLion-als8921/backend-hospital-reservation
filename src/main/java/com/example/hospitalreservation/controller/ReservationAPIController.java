@@ -1,8 +1,6 @@
 package com.example.hospitalreservation.controller;
 
-import com.example.hospitalreservation.dto.CreateReservationRequest;
-import com.example.hospitalreservation.dto.CreateReservationResponse;
-import com.example.hospitalreservation.dto.ShowReservationResponse;
+import com.example.hospitalreservation.dto.*;
 import com.example.hospitalreservation.model.Reservation;
 import com.example.hospitalreservation.service.ReservationService;
 import lombok.extern.slf4j.Slf4j;
@@ -55,21 +53,22 @@ public class ReservationAPIController {
     }
 
     @DeleteMapping("/{id}")
-    public Map<String, Object> cancelReservation(@RequestBody Map<String, Object> reservationData, @PathVariable Long id) {
-        String cancelReason = reservationData.get("cancelReason").toString();
+    public ResponseEntity<DeleteReservationResponse> cancelReservation(@RequestBody DeleteReservationRequest dto, @PathVariable Long id) {
+        String cancelReason = dto.getCancelReason();
         log.info("cancel reason: {}", cancelReason);
-        Map<String, Object> map = new HashMap<>();
+        DeleteReservationResponse response;
 
         // 예약 취소 성공
         try {
             reservationService.cancelReservation(id);
-            map.put("message", "예약이 취소되었습니다.");
+            response = DeleteReservationResponse.success("예약이 취소되었습니다.");
             log.info("취소 사유 : {}", cancelReason);
+            return ResponseEntity.ok(response);
         }
         // 예약이 존재하지 않는 경우
         catch (Exception e) {
-            map.put("error", e.getMessage());
+            response = DeleteReservationResponse.failure(e.getMessage());
         }
-        return map;
+        return ResponseEntity.badRequest().body(response);
     }
 }
