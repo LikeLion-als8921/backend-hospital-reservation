@@ -40,7 +40,7 @@ public class ReservationAPIController {
         // 예약에 성공했을 경우
         try {
             reservationService.createReservation(reservation);
-            response = CreateReservationResponse.success(1001L, "예약이 완료되었습니다.", 10000L);
+            response = CreateReservationResponse.success(reservation.getId(), "예약이 완료되었습니다.", 10000L);
             log.info("예약이 완료되었습니다.");
             return ResponseEntity.ok(response);
         }
