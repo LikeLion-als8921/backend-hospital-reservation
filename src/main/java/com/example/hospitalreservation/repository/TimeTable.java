@@ -40,6 +40,7 @@ public class TimeTable {
 
         Map<Long, ReservationTime> map = new HashMap<>();
         map.put(id, reservationTime);
+        log.info("Enrolling reservation with id " + id + " and time " + reservationTime);
 
         reservationTimeTable.add(map);
     }

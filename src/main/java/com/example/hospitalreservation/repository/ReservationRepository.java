@@ -13,6 +13,7 @@ public class ReservationRepository {
     private final List<Reservation> reservations = new ArrayList<>();
     private Long nextId = 1L;
 
+    public Long getNextId() {return nextId;}
     // 모든 예약 엔티티를 조회하는 코드를 작성해주세요.
     public List<Reservation> findAll() {
         return reservations;

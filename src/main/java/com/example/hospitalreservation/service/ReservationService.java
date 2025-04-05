@@ -36,6 +36,7 @@ public class ReservationService {
     // 예약이 가능한지 검사 후 예약하기
     public void createReservation(Reservation reservation) throws Exception {
         try {
+            reservation.setId(reservationRepository.getNextId());
             timeTable.enroll(reservation);
             reservationRepository.save(reservation);
         }
