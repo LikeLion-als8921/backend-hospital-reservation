@@ -1,5 +1,7 @@
 package com.example.hospitalreservation.model;
 
+import com.example.hospitalreservation.dto.CreateReservationRequest;
+
 import java.time.LocalDateTime;
 
 public class Reservation {
