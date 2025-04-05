@@ -1,7 +1,7 @@
 package com.example.hospitalreservation.repository;
 
 import com.example.hospitalreservation.model.Reservation;
-import com.example.hospitalreservation.model.ReservationException;
+import com.example.hospitalreservation.enums.ReservationException;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;

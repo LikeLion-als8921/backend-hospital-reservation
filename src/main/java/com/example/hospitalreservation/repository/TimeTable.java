@@ -2,7 +2,7 @@ package com.example.hospitalreservation.repository;
 
 import com.example.hospitalreservation.model.Doctor;
 import com.example.hospitalreservation.model.Reservation;
-import com.example.hospitalreservation.model.ReservationException;
+import com.example.hospitalreservation.enums.ReservationException;
 import com.example.hospitalreservation.model.ReservationTime;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
