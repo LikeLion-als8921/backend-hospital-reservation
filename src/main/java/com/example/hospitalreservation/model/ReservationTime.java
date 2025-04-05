@@ -8,8 +8,8 @@ public class ReservationTime
     private LocalDateTime endTime;
 
     public ReservationTime(Reservation reservation) {
-        startTime = reservation.getReservationTime();
-        endTime = startTime.plusHours(1);
+        startTime = reservation.getReservationStartTime();
+        endTime = reservation.getReservationEndTime();
     }
     public LocalDateTime getEndTime() {
         return endTime;
