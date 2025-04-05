@@ -41,6 +41,7 @@ public class ReservationService {
     // 예약 취소 가능성을 검사 후 취소하기
     public void cancelReservation(Long id) throws Exception {
         try {
+            // ToDo : 이 부분 로직 수정해야할 것 같음..
             Reservation reservation = reservationRepository.findById(id);
             reservationRepository.deleteById(id);
             timeTable.remove(id);
