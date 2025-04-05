@@ -1,14 +1,16 @@
 package com.example.hospitalreservation.controller;
 
-import com.example.hospitalreservation.dto.ReservationRequestDTO;
+import com.example.hospitalreservation.dto.ReservationDTO;
 import com.example.hospitalreservation.dto.ReservationResponseDTO;
 import com.example.hospitalreservation.model.Reservation;
 import com.example.hospitalreservation.service.ReservationService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -23,27 +25,28 @@ public class ReservationAPIController {
     }
 
     @PostMapping("")
-    public ReservationResponseDTO reservation(@RequestBody ReservationRequestDTO dto) {
+    public ResponseEntity<ReservationResponseDTO> reservation(@RequestBody ReservationDTO dto) {
         Long patientId = dto.getPatientId();
         Long doctorId = dto.getDoctorId();
         LocalDateTime reservationStartTime = dto.getReservationStartTime();
         LocalDateTime reservationEndTime = dto.getReservationEndTime();
-
-        Reservation reservation = new Reservation(doctorId, patientId, reservationStartTime);
-
+        log.info("Reservation start: {}", reservationStartTime);
+        Reservation reservation = new Reservation(doctorId, patientId, reservationStartTime, reservationEndTime);
+        log.info("Reservation created");
         ReservationResponseDTO responseDTO;
         // 예약에 성공했을 경우
         try {
             reservationService.createReservation(reservation);
             responseDTO = new ReservationResponseDTO(1001L, "예약이 완료되었습니다.", 10000L);
             log.info("예약이 완료되었습니다.");
+            return ResponseEntity.ok(responseDTO);
         }
         // 예약에 실패했을 경우
         catch (Exception e) {
             responseDTO = new ReservationResponseDTO("해당 시간에는 이미 예약이 있습니다. 다른 시간을 선택해주세요.");
-            log.info("해당 시간에는 이미 예약이 있습니다. 다른 시간을 선택해주세요.");
+            log.info("{}", e.getMessage());
         }
-        return responseDTO;
+        return ResponseEntity.badRequest().body(responseDTO);
     }
 
     @DeleteMapping("/{id}")
