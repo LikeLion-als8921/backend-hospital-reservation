@@ -13,5 +13,4 @@ public enum ReservationException
     ReservationException(String error){
         this.errorMessage = error;
     }
-
 }
