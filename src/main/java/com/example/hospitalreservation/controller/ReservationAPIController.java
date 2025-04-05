@@ -1,5 +1,6 @@
 package com.example.hospitalreservation.controller;
 
+import com.example.hospitalreservation.dto.CreateReservationRequest;
 import com.example.hospitalreservation.dto.ReservationDTO;
 import com.example.hospitalreservation.dto.ReservationResponseDTO;
 import com.example.hospitalreservation.model.Reservation;
@@ -24,26 +25,32 @@ public class ReservationAPIController {
         this.reservationService = reservationService;
     }
 
+    @GetMapping("")
+    public ResponseEntity<List<ReservationDTO>> getReservations() {
+        return ResponseEntity.ok(reservationService.getAllReservations());
+    }
+
     @PostMapping("")
-    public ResponseEntity<ReservationResponseDTO> reservation(@RequestBody ReservationDTO dto) {
+    public ResponseEntity<ReservationResponseDTO> reservation(@RequestBody CreateReservationRequest dto) {
         Long patientId = dto.getPatientId();
         Long doctorId = dto.getDoctorId();
         LocalDateTime reservationStartTime = dto.getReservationStartTime();
         LocalDateTime reservationEndTime = dto.getReservationEndTime();
+        String reason = dto.getReason();
         log.info("Reservation start: {}", reservationStartTime);
-        Reservation reservation = new Reservation(doctorId, patientId, reservationStartTime, reservationEndTime);
+        Reservation reservation = new Reservation(doctorId, patientId, reservationStartTime, reservationEndTime, reason);
         log.info("Reservation created");
         ReservationResponseDTO responseDTO;
         // 예약에 성공했을 경우
         try {
             reservationService.createReservation(reservation);
-            responseDTO = new ReservationResponseDTO(1001L, "예약이 완료되었습니다.", 10000L);
+            responseDTO = ReservationResponseDTO.success(1001L, "예약이 완료되었습니다.", 10000L);
             log.info("예약이 완료되었습니다.");
             return ResponseEntity.ok(responseDTO);
         }
         // 예약에 실패했을 경우
         catch (Exception e) {
-            responseDTO = new ReservationResponseDTO("해당 시간에는 이미 예약이 있습니다. 다른 시간을 선택해주세요.");
+            responseDTO = ReservationResponseDTO.failure("해당 시간에는 이미 예약이 있습니다. 다른 시간을 선택해주세요.");
             log.info("{}", e.getMessage());
         }
         return ResponseEntity.badRequest().body(responseDTO);

@@ -9,12 +9,12 @@ public class ReservationResponseDTO {
     private Long calculatedFee;
     private String error;
 
-    public ReservationResponseDTO(Long reservationId, String message, Long calculatedFee) {
+    private ReservationResponseDTO(Long reservationId, String message, Long calculatedFee) {
         this.reservationId = reservationId;
         this.message = message;
         this.calculatedFee = calculatedFee;
     }
-    public ReservationResponseDTO(String errorMessage) {
+    private ReservationResponseDTO(String errorMessage) {
         this.error = errorMessage;
     }
 
@@ -22,4 +22,12 @@ public class ReservationResponseDTO {
     public String getError() {return error;}
     public Long getReservationId() {return reservationId;}
     public String getMessage() {return message;}
+
+    public static ReservationResponseDTO success(Long reservationId, String message, Long calculatedFee) {
+        return new ReservationResponseDTO(reservationId, message, calculatedFee);
+    }
+
+    public static ReservationResponseDTO failure(String errorMessage) {
+        return new ReservationResponseDTO(errorMessage);
+    }
 }
