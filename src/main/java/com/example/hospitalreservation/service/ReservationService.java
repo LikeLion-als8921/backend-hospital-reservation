@@ -50,7 +50,6 @@ public class ReservationService {
         }
     }
 
-    // 예약 취소 가능성을 검사 후 취소하기
     public DeleteReservationResponse cancelReservation(DeleteReservationRequest dto, Long id) throws Exception {
         try {
             reservationRepository.deleteById(id);

@@ -15,6 +15,14 @@ public class ShowReservationResponse {
     private String reason;
     private Long fee;
 
+    public Long getId() {return id;}
+    public Long getDoctorId() {return doctorId;}
+    public Long getPatientId() {return patientId;}
+    public LocalDateTime getReservationStartTime() {return reservationStartTime;}
+    public LocalDateTime getReservationEndTime() {return reservationEndTime;}
+    public String getReason() {return reason;}
+    public Long getFee() {return fee;}
+    
     private ShowReservationResponse(Reservation reservation) {
         this.id = reservation.getId();
         this.doctorId = reservation.getDoctorId();
@@ -28,12 +36,4 @@ public class ShowReservationResponse {
     public static ShowReservationResponse from(Reservation reservation) {
         return new ShowReservationResponse(reservation);
     }
-
-    public Long getId() {return id;}
-    public Long getDoctorId() {return doctorId;}
-    public Long getPatientId() {return patientId;}
-    public LocalDateTime getReservationStartTime() {return reservationStartTime;}
-    public LocalDateTime getReservationEndTime() {return reservationEndTime;}
-    public String getReason() {return reason;}
-    public Long getFee() {return fee;}
 }

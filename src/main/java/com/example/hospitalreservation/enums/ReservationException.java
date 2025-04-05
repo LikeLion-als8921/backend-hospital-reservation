@@ -8,12 +8,10 @@ public enum ReservationException
 
     private final String errorMessage;
 
+    public String getErrorMessage(){ return errorMessage; }
+
     ReservationException(String error){
         this.errorMessage = error;
-    }
-
-    public String getErrorMessage(){
-        return errorMessage;
     }
 
 }

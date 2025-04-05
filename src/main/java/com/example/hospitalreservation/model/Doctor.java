@@ -9,11 +9,6 @@ public class Doctor {
     private static int startHour = 9;
     private static int endHour = 17;
 
-    public static int getStartHour() {
-        return startHour;
-    }
-
-    public static int getEndHour() {
-        return endHour;
-    }
+    public static int getStartHour() { return startHour; }
+    public static int getEndHour() { return endHour; }
 }

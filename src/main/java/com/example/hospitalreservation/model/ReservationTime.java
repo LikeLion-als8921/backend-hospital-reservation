@@ -7,16 +7,12 @@ public class ReservationTime
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 
+    public LocalDateTime getStartTime() { return startTime; }
+    public LocalDateTime getEndTime() { return endTime; }
+
     public ReservationTime(Reservation reservation) {
         startTime = reservation.getReservationStartTime();
         endTime = reservation.getReservationEndTime();
-    }
-    public LocalDateTime getEndTime() {
-        return endTime;
-    }
-
-    public LocalDateTime getStartTime() {
-        return startTime;
     }
 
     public boolean isConflict(ReservationTime other){
