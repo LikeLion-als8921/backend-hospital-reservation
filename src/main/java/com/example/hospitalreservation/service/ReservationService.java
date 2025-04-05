@@ -1,5 +1,6 @@
 package com.example.hospitalreservation.service;
 
+import com.example.hospitalreservation.dto.ShowReservationResponse;
 import com.example.hospitalreservation.model.Reservation;
 import com.example.hospitalreservation.repository.TimeTable;
 import com.example.hospitalreservation.repository.ReservationRepository;
@@ -23,8 +24,13 @@ public class ReservationService {
     }
 
     // 모든 예약 리스트를 조회하는 코드를 작성해주세요.
-    public List<Reservation> getAllReservations() {
-        return reservationRepository.findAll();
+    public List<ShowReservationResponse> getAllReservations() {
+        log.info("Get all reservations Service");
+        return reservationRepository.findAll().stream()
+                .map(reservation-> {
+                    reservation.setFee(10000L);
+                    return ShowReservationResponse.from(reservation);
+                }).toList();
     }
 
     // 예약이 가능한지 검사 후 예약하기
