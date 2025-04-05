@@ -9,13 +9,11 @@ public class CreateReservationResponse {
     private Long calculatedFee;
     private String error;
 
-    private CreateReservationResponse(Long reservationId, String message, Long calculatedFee) {
+    private CreateReservationResponse(Long reservationId, String message, Long calculatedFee, String error) {
         this.reservationId = reservationId;
         this.message = message;
         this.calculatedFee = calculatedFee;
-    }
-    private CreateReservationResponse(String errorMessage) {
-        this.error = errorMessage;
+        this.error = error;
     }
 
     public Long getCalculatedFee() {return calculatedFee;}
@@ -24,10 +22,10 @@ public class CreateReservationResponse {
     public String getMessage() {return message;}
 
     public static CreateReservationResponse success(Long reservationId, String message, Long calculatedFee) {
-        return new CreateReservationResponse(reservationId, message, calculatedFee);
+        return new CreateReservationResponse(reservationId, message, calculatedFee, null);
     }
 
     public static CreateReservationResponse failure(String errorMessage) {
-        return new CreateReservationResponse(errorMessage);
+        return new CreateReservationResponse(null, null, null, errorMessage);
     }
 }
