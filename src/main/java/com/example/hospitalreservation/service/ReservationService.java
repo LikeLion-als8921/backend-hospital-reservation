@@ -2,9 +2,10 @@ package com.example.hospitalreservation.service;
 
 import com.example.hospitalreservation.dto.*;
 import com.example.hospitalreservation.enums.ReservationType;
+import com.example.hospitalreservation.model.Doctor;
+import com.example.hospitalreservation.model.Patient;
 import com.example.hospitalreservation.model.Reservation;
-import com.example.hospitalreservation.repository.TimeTable;
-import com.example.hospitalreservation.repository.ReservationRepository;
+import com.example.hospitalreservation.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +15,14 @@ import java.util.List;
 @Service
 public class ReservationService {
 
-    private final ReservationRepository reservationRepository;
+    private final ReservationRepo reservationRepository;
+    private final PatientRepo patientRepository;
+    private final DoctorRepo doctorRepository;
     private final TimeTable timeTable;
 
-    public ReservationService(ReservationRepository reservationRepository, TimeTable timeTable) {
+    public ReservationService(ReservationRepo reservationRepository, DoctorRepo doctorRepository, PatientRepo patientRepository, TimeTable timeTable) {
+        this.doctorRepository = doctorRepository;
+        this.patientRepository = patientRepository;
         this.reservationRepository = reservationRepository;
         this.timeTable = timeTable;
     }
@@ -29,16 +34,18 @@ public class ReservationService {
     }
 
     public CreateReservationResponse createReservation(CreateReservationRequest dto) throws Exception {
+        log.info("Create reservation Service");
+        Doctor doctor = doctorRepository.findById(dto.getDoctorId()).orElseThrow(() -> new Exception("Doctor not found"));
+        Patient patient = patientRepository.findById(dto.getPatientId()).orElseThrow(() -> new Exception("Patient not found"));
 
         Reservation reservation = new Reservation(
-                dto.getPatientId(),
-                dto.getDoctorId(),
+                doctor,
+                patient,
                 dto.getReservationStartTime(),
                 dto.getReservationEndTime(),
                 dto.getReason());
 
         reservation.setFee(ReservationType.calculateFee(dto.getReason()));
-        reservation.setId(reservationRepository.getNextId());
         try {
             timeTable.enroll(reservation);
             reservationRepository.save(reservation);
