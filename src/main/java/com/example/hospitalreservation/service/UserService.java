@@ -34,7 +34,7 @@ public class UserService {
         Optional<User> optionalUser = userRepository.findByUsername(dto.getUsername());
         if(optionalUser.isPresent()) {
             User user = optionalUser.get();
-            return passwordEncoder.matches(dto.getPassword(), user.getEncodedPassword());
+            return passwordEncoder.matches(dto.getPassword(), user.getPassword());
         }
         return false;
     }

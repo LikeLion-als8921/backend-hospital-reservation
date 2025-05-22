@@ -12,14 +12,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String username;
-    private String encodedPassword;
+    private String password;
 
     public User() {}
     public User(String username, String encodedPassword) {
         this.username = username;
-        this.encodedPassword = encodedPassword;
+        this.password = password;
     }
 
-    public String getEncodedPassword() { return encodedPassword; }
-    public String getUsername() { return username; }
+    public String getPassword() { return password; }
 }
