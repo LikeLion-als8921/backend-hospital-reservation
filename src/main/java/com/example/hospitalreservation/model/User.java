@@ -13,4 +13,13 @@ public class User {
     private Long id;
     private String username;
     private String encodedPassword;
+
+    public User() {}
+    public User(String username, String encodedPassword) {
+        this.username = username;
+        this.encodedPassword = encodedPassword;
+    }
+
+    public String getEncodedPassword() { return encodedPassword; }
+    public String getUsername() { return username; }
 }
