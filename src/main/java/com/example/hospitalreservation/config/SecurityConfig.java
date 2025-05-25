@@ -18,10 +18,8 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/users/register", "/api/users/login").permitAll()  // 인증없이 허용
-                        .anyRequest().authenticated()
-                )
-                .httpBasic(withDefaults());  // 기본 HTTP Basic 인증 활성화 (필요 없으면 제거)
+                        .anyRequest().permitAll()  // 모든 요청 인증 없이 허용
+                );
         return http.build();
     }
 
